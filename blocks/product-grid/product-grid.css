@@ -1,0 +1,30 @@
+.product-grid ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 24px;
+}
+
+.product-grid .product-grid-item {
+  border: 1px solid var(--brand-silver);
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--background-color);
+}
+
+.product-grid .product-grid-image img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.product-grid .product-grid-body {
+  padding: 16px;
+}
+
+.product-grid .product-grid-price {
+  font-weight: 700;
+  color: var(--brand-green);
+}
