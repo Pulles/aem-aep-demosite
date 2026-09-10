@@ -11,6 +11,7 @@ import {
   loadCSS,
   buildBlock,
 } from './aem.js';
+import { initAnalytics, trackPageView } from './analytics.js';
 
 if (window.trustedTypes && window.trustedTypes.createPolicy) {
   const innerTT = window.trustedTypes.createPolicy('tt-inner', {
@@ -176,6 +177,14 @@ async function loadEager(doc) {
     }
   } catch (e) {
     // do nothing
+  }
+
+  try {
+    await initAnalytics();
+    trackPageView();
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.error('Analytics init/page-view failed', e);
   }
 }
 

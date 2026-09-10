@@ -16,8 +16,14 @@
   --light-color: #f8f8f8;
   --dark-color: #505050;
   --text-color: #131313;
-  --link-color: #3b63fb;
-  --link-hover-color: #1d3ecf;
+  --link-color: #00843d;
+  --link-hover-color: #00612d;
+
+  /* heineken 0.0 brand (placeholder — public brand colors only) */
+  --brand-green: #00843d;
+  --brand-green-dark: #00612d;
+  --brand-red: #d0021b;
+  --brand-silver: #c8ccce;
 
   /* fonts */
   --body-font-family: roboto, roboto-fallback, sans-serif;
