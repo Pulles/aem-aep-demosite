@@ -5,20 +5,32 @@
 
 .hero {
   position: relative;
+  display: flex;
+  align-items: flex-end;
   padding: 40px 24px;
-  min-height: 300px;
+  min-height: 420px;
 }
 
-.hero h1 {
+.hero::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(0deg, rgb(0 0 0 / 65%) 0%, rgb(0 0 0 / 10%) 60%);
+}
+
+.hero h1,
+.hero p {
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
   color: var(--background-color);
+  text-shadow: 0 2px 8px rgb(0 0 0 / 35%);
 }
 
 .hero picture {
   position: absolute;
-  z-index: -1;
+  z-index: -2;
   inset: 0;
   object-fit: cover;
   box-sizing: border-box;

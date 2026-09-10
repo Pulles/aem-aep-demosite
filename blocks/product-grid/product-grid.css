@@ -9,9 +9,16 @@
 
 .product-grid .product-grid-item {
   border: 1px solid var(--brand-silver);
-  border-radius: 8px;
+  border-radius: var(--card-radius);
   overflow: hidden;
   background-color: var(--background-color);
+  box-shadow: var(--card-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-grid .product-grid-item:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--card-shadow-hover);
 }
 
 .product-grid .product-grid-image img {
@@ -25,6 +32,12 @@
 }
 
 .product-grid .product-grid-price {
+  display: inline-block;
+  margin: 4px 0 12px;
+  border-radius: 999px;
+  padding: 4px 12px;
+  background-color: var(--light-color);
+  font-size: var(--body-font-size-xs);
   font-weight: 700;
-  color: var(--brand-green);
+  color: var(--brand-green-dark);
 }

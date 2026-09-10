@@ -1,5 +1,6 @@
 footer {
   background-color: var(--light-color);
+  border-top: 3px solid var(--brand-green);
   font-size: var(--body-font-size-xs);
 }
 

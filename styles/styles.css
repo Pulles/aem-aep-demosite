@@ -25,6 +25,11 @@
   --brand-red: #d0021b;
   --brand-silver: #c8ccce;
 
+  /* shared card treatment */
+  --card-radius: 12px;
+  --card-shadow: 0 4px 16px rgb(0 0 0 / 8%);
+  --card-shadow-hover: 0 8px 24px rgb(0 0 0 / 12%);
+
   /* fonts */
   --body-font-family: roboto, roboto-fallback, sans-serif;
   --heading-font-family: roboto-condensed, roboto-condensed-fallback, sans-serif;
@@ -113,8 +118,9 @@ h6 {
   margin-top: 0.8em;
   margin-bottom: 0.25em;
   font-family: var(--heading-font-family);
-  font-weight: 600;
-  line-height: 1.25;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
   scroll-margin: 40px;
 }
 
@@ -205,8 +211,8 @@ button.button:disabled {
 
 a.button.primary,
 button.button.primary {
-  border-color: var(--text-color);
-  background-color: var(--text-color);
+  border-color: var(--brand-green);
+  background-color: var(--brand-green);
   color: var(--background-color);
 }
 
@@ -214,9 +220,9 @@ a.button.primary:hover,
 a.button.primary:focus-visible,
 button.button.primary:hover,
 button.button.primary:focus-visible {
-  border-color: var(--dark-color);
-  background-color: var(--dark-color);
-  color: var(--light-color);
+  border-color: var(--brand-green-dark);
+  background-color: var(--brand-green-dark);
+  color: var(--background-color);
 }
 
 a.button.primary[aria-disabled="true"],
