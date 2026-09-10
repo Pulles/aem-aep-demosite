@@ -179,13 +179,12 @@ async function loadEager(doc) {
     // do nothing
   }
 
-  try {
-    await initAnalytics();
-    trackPageView();
-  } catch (e) {
-    // eslint-disable-next-line no-console
-    console.error('Analytics init/page-view failed', e);
-  }
+  initAnalytics()
+    .then(() => trackPageView())
+    .catch((e) => {
+      // eslint-disable-next-line no-console
+      console.error('Analytics init/page-view failed', e);
+    });
 }
 
 /**
