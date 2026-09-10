@@ -83,6 +83,24 @@ verification, using a placeholder decision-scope name
   against a real offer, that would be a small, separate code fix at that
   time — not a rebuild.
 
+## Implementation note: DA content authoring gotcha (discovered 2026-09-10)
+
+Authoring a block's content as bare text directly inside the block div
+(`<div class="offer-banner">scope-name</div>`) does **not** survive DA's
+HTML↔Markdown round-trip — the `class` attribute is silently dropped,
+turning it into an undecorated plain `<div><p>scope-name</p></div>`. The
+fix is the same row/cell wrapping already used by `product-grid`:
+
+```html
+<div class="offer-banner">
+  <div><div>scope-name</div></div>
+</div>
+```
+
+`offer-banner.js`'s `block.textContent.trim()` still correctly extracts
+the scope value regardless of the extra nesting. Deployed and verified
+working on all four pages.
+
 ## Placements
 
 One `offer-banner` block per page, each independently requesting its own
