@@ -48,19 +48,40 @@ Offers, decision scopes/surfaces) must happen through the AJO web UI,
 done by the user. This project only builds the site-side request/render
 integration.
 
-## Prerequisite (blocks implementation start)
+## Prerequisite — updated 2026-09-10: building ahead of it
 
-The exact decision-scope/surface identifier format Adobe's current Offer
-Decisioning expects via the Web SDK needs to be verified empirically
-against a real scope — the same way the datastream ID and edge endpoint
-were verified via direct `curl` calls during the original site's design
-(see the other spec's "Existing infrastructure" section for that
-precedent). The user will create one minimal test Decision Policy + Offer
-in AJO (sandbox `sandbox51`) and provide the resulting decision scope or
-surface identifier. **Implementation cannot start until this is
-provided** — the first implementation step, once it is, is a `curl`
-verification test (see "Verification gate" below), not writing the
-block's code directly from documentation alone.
+Originally this spec blocked implementation on the user first creating a
+real Decision Policy + Offer in AJO and providing its decision scope, so
+the exact request/response shape could be verified empirically (as was
+done for the datastream ID and edge endpoint during the original site's
+design) before writing any parsing code.
+
+The user has since asked to deploy the mechanism now, ahead of that
+verification, using a placeholder decision-scope name
+(`heineken-demo-offer-placeholder`), accepting that:
+
+- The request itself (`alloy('sendEvent', { renderDecisions: true,
+  decisionScopes: [...] })`) follows Adobe's stable, documented Web SDK
+  personalization contract — this part is not placeholder, it's the real
+  API shape.
+- Because no real Decision Policy exists for the placeholder scope yet,
+  the Edge Network will return zero qualifying propositions, and
+  `getOffer()` will correctly resolve to `null` on every page load — the
+  `offer-banner` blocks will render nothing, site-wide, until real scopes
+  are wired in. This is a live no-op, not visible or broken.
+- The proposition **content-parsing logic** (extracting headline/
+  description/CTA from a real proposition's `data.content`) is written
+  best-effort against Adobe's commonly-documented shape, but has NOT been
+  empirically verified against a real offer yet, since none exists. It
+  may need adjustment once the user creates a real offer and we swap in
+  its actual scope — this is expected, not a sign the initial
+  implementation was wrong.
+- Swapping in a real scope later is a **content-only change** (updating
+  the decision-scope value authored in each page, DA content — not code),
+  matching how `product-grid`'s data source is authored per-page. If the
+  content-parsing logic does turn out to need adjustment once tested
+  against a real offer, that would be a small, separate code fix at that
+  time — not a rebuild.
 
 ## Placements
 
@@ -137,7 +158,7 @@ whatever proposition/decision identifiers the verification step confirms
 are needed in the event payload for AJO to attribute it back to the
 correct decision.
 
-## Verification gate (first implementation step, not a later task)
+## Verification gate (deferred: now a swap-in step, not a blocking first step)
 
 Once the user provides a real decision scope:
 
