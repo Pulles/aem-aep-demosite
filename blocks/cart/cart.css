@@ -1,0 +1,30 @@
+.cart {
+  border: 1px solid var(--brand-silver);
+  border-radius: 8px;
+  padding: 16px;
+  max-width: 400px;
+}
+
+.cart h3 {
+  margin-top: 0;
+}
+
+.cart .cart-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cart .cart-items li {
+  padding: 4px 0;
+  border-bottom: 1px solid var(--light-color);
+}
+
+.cart .cart-total {
+  font-weight: 700;
+}
+
+.cart .cart-confirmation {
+  color: var(--brand-green);
+  font-weight: 500;
+}
