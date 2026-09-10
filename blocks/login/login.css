@@ -1,0 +1,25 @@
+.login {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.login .login-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.login .login-form input {
+  box-sizing: border-box;
+  border: 1px solid var(--brand-silver);
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: var(--body-font-size-xs);
+}
+
+.login .login-greeting {
+  font-size: var(--body-font-size-xs);
+  font-weight: 500;
+  white-space: nowrap;
+}
