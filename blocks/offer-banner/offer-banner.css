@@ -1,0 +1,16 @@
+.offer-banner .offer-banner-content {
+  border: 1px solid var(--brand-silver);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow);
+  padding: 24px;
+  background-color: var(--light-color);
+}
+
+.offer-banner .offer-banner-content h3 {
+  margin-top: 0;
+  color: var(--brand-green-dark);
+}
+
+.offer-banner .offer-banner-content p {
+  margin-bottom: 16px;
+}
