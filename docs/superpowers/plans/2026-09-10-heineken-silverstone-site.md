@@ -30,12 +30,15 @@
 **Files:**
 - Modify: `styles/styles.css`
 - Modify: `head.html`
+- Create: `scripts/identity.js`
 - Create: `scripts/analytics.js`
 - Modify: `scripts/scripts.js`
 - Test: manual (local preview + browser Network tab; no automated test runner in this repo, see `package.json`)
 
 **Interfaces:**
-- Produces: `scripts/analytics.js` exports `initAnalytics()`, `trackEvent(eventType, xdmFields = {})`, `trackPageView()`. Every later task that needs to fire an XDM event imports `trackEvent` from `'../../scripts/analytics.js'`.
+- Produces: `scripts/identity.js` exports `getIdentity()` (returns `{ name, email } | null`), `setIdentity({ name, email })`, `clearIdentity()`. Dispatches a `window` `CustomEvent('identitychange', { detail: identity | null })` on every change. `scripts/analytics.js` exports `initAnalytics()`, `trackEvent(eventType, xdmFields = {})`, `trackPageView()`. Every later task that needs to fire an XDM event imports `trackEvent` from `'../../scripts/analytics.js'`; Task 2's `login` block imports `getIdentity`/`setIdentity`/`clearIdentity` from `'../../scripts/identity.js'`.
+
+**Note (pre-flight ruling):** `identity.js` was moved into this task from Task 2, because `analytics.js` (this task) unconditionally imports it — creating `analytics.js` without it would ship a broken import and fail this task's own Step 7 verification. See ledger.
 
 - [ ] **Step 1: Add Heineken 0.0 brand color variables**
 
@@ -79,7 +82,45 @@ Edit `head.html`, add after the existing two `<script nonce="aem" ...>` tags (ke
 
 Note for whoever runs this step: this is Adobe's standard, unversioned Web SDK stub snippet (stable for years). If the AEP UI's datastream "Setup" tab shows a different exact library URL when you have access to check it, prefer that URL — the stub logic itself does not change.
 
-- [ ] **Step 4: Create `scripts/analytics.js`**
+- [ ] **Step 4: Create `scripts/identity.js`**
+
+```js
+/**
+ * Mock identity for the Heineken 0.0 Silverstone GP demo site.
+ * No real authentication — captures a name + email client-side so the
+ * site can demonstrate AEP identity stitching for "logged in" users.
+ */
+const STORAGE_KEY = 'heineken-demo-identity';
+
+/**
+ * @returns {{ name: string, email: string } | null}
+ */
+export function getIdentity() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+/**
+ * @param {{ name: string, email: string }} identity
+ * @returns {{ name: string, email: string }}
+ */
+export function setIdentity(identity) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(identity));
+  window.dispatchEvent(new CustomEvent('identitychange', { detail: identity }));
+  return identity;
+}
+
+export function clearIdentity() {
+  localStorage.removeItem(STORAGE_KEY);
+  window.dispatchEvent(new CustomEvent('identitychange', { detail: null }));
+}
+```
+
+- [ ] **Step 5: Create `scripts/analytics.js`**
 
 ```js
 /**
@@ -130,7 +171,7 @@ export function trackPageView() {
 }
 ```
 
-- [ ] **Step 5: Fire a page view on every page load**
+- [ ] **Step 6: Fire a page view on every page load**
 
 Edit `scripts/scripts.js`. Add the import at the top alongside the existing `aem.js` import block:
 
@@ -183,79 +224,39 @@ async function loadEager(doc) {
 }
 ```
 
-- [ ] **Step 6: Verify JS lint passes**
+- [ ] **Step 7: Verify JS lint passes**
 
 Run: `npm run lint:js`
 Expected: no errors.
 
-- [ ] **Step 7: Manually verify locally**
+- [ ] **Step 8: Manually verify locally**
 
 Run: `npx -y @adobe/aem-cli up`
 Open the local preview in a browser, open DevTools > Network, filter for `adobedc.net`.
 Expected: a request to `edge.adobedc.net/ee/irl1/v1/interact` (or similar `/ee/.../v1/interact` path) returns `200` on page load.
 
-- [ ] **Step 8: Commit**
+- [ ] **Step 9: Commit**
 
 ```bash
 cd "/Users/pvanoosterho/AEM_AEP demosite"
-git add styles/styles.css head.html scripts/analytics.js scripts/scripts.js
-git commit -m "Add Heineken 0.0 brand colors and Adobe Web SDK page-view tracking"
+git add styles/styles.css head.html scripts/identity.js scripts/analytics.js scripts/scripts.js
+git commit -m "Add Heineken 0.0 brand colors, mock identity, and Adobe Web SDK page-view tracking"
 git push origin main
 ```
 
 ---
 
-### Task 2: Mock identity + login/registration block
+### Task 2: Login/registration block
 
 **Files:**
-- Create: `scripts/identity.js`
 - Create: `blocks/login/login.js`
 - Create: `blocks/login/login.css`
 - Test: manual (local preview + browser Network tab + localStorage inspection)
 
 **Interfaces:**
-- Consumes: `trackEvent` from `scripts/analytics.js` (Task 1).
-- Produces: `scripts/identity.js` exports `getIdentity()` (returns `{ name, email } | null`), `setIdentity({ name, email })`, `clearIdentity()`. `scripts/analytics.js` (Task 1) already consumes `getIdentity` — no change needed there, just confirm it resolves once this file exists. Dispatches a `window` `CustomEvent('identitychange', { detail: identity | null })` on every change, for any block that wants to react.
+- Consumes: `getIdentity()`, `setIdentity({ name, email })`, `clearIdentity()` from `scripts/identity.js` (Task 1); `trackEvent` from `scripts/analytics.js` (Task 1).
 
-- [ ] **Step 1: Create `scripts/identity.js`**
-
-```js
-/**
- * Mock identity for the Heineken 0.0 Silverstone GP demo site.
- * No real authentication — captures a name + email client-side so the
- * site can demonstrate AEP identity stitching for "logged in" users.
- */
-const STORAGE_KEY = 'heineken-demo-identity';
-
-/**
- * @returns {{ name: string, email: string } | null}
- */
-export function getIdentity() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : null;
-  } catch (e) {
-    return null;
-  }
-}
-
-/**
- * @param {{ name: string, email: string }} identity
- * @returns {{ name: string, email: string }}
- */
-export function setIdentity(identity) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(identity));
-  window.dispatchEvent(new CustomEvent('identitychange', { detail: identity }));
-  return identity;
-}
-
-export function clearIdentity() {
-  localStorage.removeItem(STORAGE_KEY);
-  window.dispatchEvent(new CustomEvent('identitychange', { detail: null }));
-}
-```
-
-- [ ] **Step 2: Create `blocks/login/login.js`**
+- [ ] **Step 1: Create `blocks/login/login.js`**
 
 ```js
 import { getIdentity, setIdentity, clearIdentity } from '../../scripts/identity.js';
@@ -317,7 +318,7 @@ export default function decorate(block) {
 }
 ```
 
-- [ ] **Step 3: Create `blocks/login/login.css`**
+- [ ] **Step 2: Create `blocks/login/login.css`**
 
 ```css
 .login {
@@ -347,12 +348,12 @@ export default function decorate(block) {
 }
 ```
 
-- [ ] **Step 4: Verify lint passes**
+- [ ] **Step 3: Verify lint passes**
 
 Run: `npm run lint`
 Expected: no errors.
 
-- [ ] **Step 5: Add the `login` block to the site nav (DA content, not git)**
+- [ ] **Step 4: Add the `login` block to the site nav (DA content, not git)**
 
 Fetch the current nav so you don't clobber it:
 
@@ -388,16 +389,16 @@ curl -s -w "\nHTTP_STATUS:%{http_code}\n" -X POST "https://admin.hlx.page/previe
 
 Expected: both calls return `200`/`201`.
 
-- [ ] **Step 6: Manually verify**
+- [ ] **Step 5: Manually verify**
 
 Run: `npx -y @adobe/aem-cli up`, open the local preview.
 Expected: a login form appears in the header. Submitting name+email shows "Hi, `<name>`" + a Log out button; DevTools > Application > Local Storage shows `heineken-demo-identity`; DevTools > Network shows a `200` to `edge.adobedc.net/ee/.../v1/interact` for the login/registration event. Reloading the page keeps you logged in (identity persisted). Log out clears it and shows the form again.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 6: Commit**
 
 ```bash
 cd "/Users/pvanoosterho/AEM_AEP demosite"
-git add scripts/identity.js blocks/login/login.js blocks/login/login.css
+git add blocks/login/login.js blocks/login/login.css
 git commit -m "Add mock login/registration block with identity tracking"
 git push origin main
 ```
