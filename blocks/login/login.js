@@ -1,4 +1,6 @@
-import { getIdentity, setIdentity, clearIdentity } from '../../scripts/identity.js';
+import {
+  getIdentity, setIdentity, clearIdentity, isKnownEmail, rememberEmail,
+} from '../../scripts/identity.js';
 import { trackEvent } from '../../scripts/analytics.js';
 
 /**
@@ -36,7 +38,8 @@ function renderForm(block) {
     const name = form.elements.name.value.trim();
     const email = form.elements.email.value.trim();
     if (!name || !email) return;
-    const isNewUser = !getIdentity();
+    const isNewUser = !isKnownEmail(email);
+    rememberEmail(email);
     const identity = setIdentity({ name, email });
     trackEvent(isNewUser ? 'authentication.registration' : 'authentication.login');
     renderLoggedIn(block, identity);

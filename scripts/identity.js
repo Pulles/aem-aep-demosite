@@ -31,3 +31,35 @@ export function clearIdentity() {
   localStorage.removeItem(STORAGE_KEY);
   window.dispatchEvent(new CustomEvent('identitychange', { detail: null }));
 }
+
+const KNOWN_EMAILS_KEY = 'heineken-demo-known-emails';
+
+/**
+ * @param {string} email
+ * @returns {boolean} true if this email has been seen (registered) before
+ */
+export function isKnownEmail(email) {
+  try {
+    const raw = localStorage.getItem(KNOWN_EMAILS_KEY);
+    const known = raw ? JSON.parse(raw) : [];
+    return known.includes(email);
+  } catch (e) {
+    return false;
+  }
+}
+
+/**
+ * @param {string} email
+ */
+export function rememberEmail(email) {
+  try {
+    const raw = localStorage.getItem(KNOWN_EMAILS_KEY);
+    const known = raw ? JSON.parse(raw) : [];
+    if (!known.includes(email)) {
+      known.push(email);
+      localStorage.setItem(KNOWN_EMAILS_KEY, JSON.stringify(known));
+    }
+  } catch (e) {
+    // do nothing
+  }
+}

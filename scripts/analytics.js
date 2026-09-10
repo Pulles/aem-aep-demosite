@@ -42,5 +42,11 @@ export function trackEvent(eventType, xdmFields = {}) {
  * @returns {Promise<object>}
  */
 export function trackPageView() {
-  return trackEvent('web.webpagedetails.pageViews');
+  return trackEvent('web.webpagedetails.pageViews', {
+    web: {
+      webPageDetails: {
+        name: document.title,
+      },
+    },
+  });
 }
