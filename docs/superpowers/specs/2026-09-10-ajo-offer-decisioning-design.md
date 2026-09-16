@@ -129,18 +129,38 @@ Wraps the Web SDK's personalization request and normalizes the response:
  * Requests a personalized decision for a given scope and normalizes
  * whatever Adobe returns into simple renderable fields.
  * @param {string} decisionScope
- * @returns {Promise<{ headline: string, description: string, ctaText: string, ctaHref: string } | null>}
+ * @returns {Promise<{
+ *   html?: string, headline?: string, description?: string,
+ *   ctaText?: string, ctaHref?: string, proposition: object
+ * } | null>}
  */
 export async function getOffer(decisionScope) { ... }
 ```
 
 - Calls `window.alloy('sendEvent', { renderDecisions: true, decisionScopes: [decisionScope] })`.
-- On success, extracts the first qualifying proposition's content and maps
-  it to `{ headline, description, ctaText, ctaHref }`. The exact property
-  paths inside the response depend on the verification step (see
-  "Prerequisite") — this function is the single place that translates
-  Adobe's raw shape into the app's simple contract, so nothing else in the
-  codebase needs to know Adobe's schema.
+- On success, extracts the first qualifying proposition's first item and
+  normalizes it based on its XDM schema — updated 2026-09-15 to be
+  generic rather than assuming one rigid field schema, since AJO authors
+  can name JSON-content-item fields however they like:
+  - `https://ns.adobe.com/personalization/json-content-item` — matches
+    common field-name aliases (`headline`/`title`/`heading`/`name`,
+    `description`/`body`/`text`/`message`/`subheadline`,
+    `ctaText`/`buttonText`/`cta`/`ctaLabel`,
+    `ctaHref`/`ctaUrl`/`url`/`link`/`href`) so whatever an author actually
+    calls their fields, the banner still renders. `data.content` may be a
+    JSON string or an object — both are handled. Resolves to `null` if
+    neither a headline nor description alias is found.
+  - `https://ns.adobe.com/personalization/html-content-item` — `data.content`
+    is a trusted raw HTML string (from our own configured AEP org, not
+    user input), rendered directly via `innerHTML`.
+  - Any other schema (e.g. `dom-action`, `ruleset`) resolves to `null` —
+    not meaningful to hand-render inside a single block.
+  - Verified 2026-09-15 via a Node-based unit test against 7 representative
+    response shapes (standard fields, aliased fields, stringified JSON,
+    HTML content, empty propositions, unrecognized schema, timeout) — all
+    passed. Still not verified against a *real* AJO offer (none existed at
+    time of writing); the exact real-world shape may reveal a case this
+    doesn't cover.
 - Returns `null` (not a thrown error) when: the call fails, times out, or
   no proposition qualifies for this scope. Callers treat `null` as "render
   nothing" — never a broken/error UI state.
@@ -152,12 +172,17 @@ export async function getOffer(decisionScope) { ... }
 - Reads the decision scope from the block's authored content (a single
   text value, same pattern as how `product-grid` reads a data-source
   link).
-- Calls `getOffer(scope)`. If it resolves to an offer, renders a headline,
-  description, and a CTA button linking to `ctaHref`. If it resolves to
-  `null`, the block renders **nothing** — no empty box, no placeholder
-  text, no console error visible to a site visitor. (Internally, a
-  `console.error` for actual failures is fine, matching the rest of the
-  site's error-handling convention — just never user-visible broken UI.)
+- Calls `getOffer(scope)`. If it resolves to an offer with `html`, injects
+  it directly. Otherwise renders whichever of headline/description/CTA
+  are present (each is optional and skipped if absent — a headline-only
+  offer is valid, as is one with no CTA). If it resolves to `null`, the
+  block renders **nothing** — no empty box, no placeholder text, no
+  console error visible to a site visitor. (Internally, a `console.error`
+  for actual failures is fine, matching the rest of the site's
+  error-handling convention — just never user-visible broken UI.)
+- Attaches the interaction-tracking click handler to every `<a>` inside
+  the rendered content generically (covers both the single-CTA field-based
+  case and an HTML offer with multiple links).
 - CSS scoped to `.offer-banner`, reusing the same shared `--card-radius` /
   `--card-shadow` / brand-color variables as the rest of the site's
   premium/sporty styling pass, so it looks native to the rest of the
