@@ -30,9 +30,9 @@
   --card-shadow: 0 4px 16px rgb(0 0 0 / 8%);
   --card-shadow-hover: 0 8px 24px rgb(0 0 0 / 12%);
 
-  /* fonts */
-  --body-font-family: roboto, roboto-fallback, sans-serif;
-  --heading-font-family: roboto-condensed, roboto-condensed-fallback, sans-serif;
+  /* fonts — see styles/brand.css for the full source token extraction */
+  --body-font-family: "PT Sans", helvetica, arial, sans-serif;
+  --heading-font-family: "HeinekenSerif18", "PT Serif", georgia, serif;
 
   /* body sizes */
   --body-font-size-m: 22px;
@@ -49,19 +49,6 @@
 
   /* nav height */
   --nav-height: 64px;
-}
-
-/* fallback fonts */
-@font-face {
-  font-family: roboto-condensed-fallback;
-  size-adjust: 88.82%;
-  src: local('Arial');
-}
-
-@font-face {
-  font-family: roboto-fallback;
-  size-adjust: 99.529%;
-  src: local('Arial');
 }
 
 @media (width >= 900px) {
