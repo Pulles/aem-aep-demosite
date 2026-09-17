@@ -2,11 +2,38 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-wrap: wrap;
+}
+
+.login .login-mode-switcher {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  border: 1px solid var(--brand-silver);
+  border-radius: 4px;
+  padding: 2px;
+}
+
+.login .login-mode-button {
+  border: 0;
+  border-radius: 3px;
+  padding: 5px 8px;
+  color: var(--brand-black);
+  background: transparent;
+  font-size: var(--body-font-size-xs);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.login .login-mode-button.active {
+  color: var(--brand-white);
+  background: var(--brand-green);
 }
 
 .login .login-form {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
 }
 
@@ -16,6 +43,19 @@
   border-radius: 4px;
   padding: 6px 10px;
   font-size: var(--body-font-size-xs);
+}
+
+.login .login-optin {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--body-font-size-xs);
+  white-space: nowrap;
+}
+
+.login .login-optin input {
+  width: auto;
+  margin: 0;
 }
 
 .login .login-greeting {
