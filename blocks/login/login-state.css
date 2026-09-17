@@ -1,0 +1,3 @@
+.login:not(.open):not(:focus-within) .login-form {
+  display: none !important;
+}
