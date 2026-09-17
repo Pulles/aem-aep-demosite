@@ -1,8 +1,9 @@
 .login {
+  position: relative;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 12px;
-  flex-wrap: wrap;
 }
 
 .login .login-mode-switcher {
@@ -12,6 +13,7 @@
   border: 1px solid var(--brand-silver);
   border-radius: 4px;
   padding: 2px;
+  background: var(--background-color);
 }
 
 .login .login-mode-button {
@@ -31,18 +33,33 @@
 }
 
 .login .login-form {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 3;
+  box-sizing: border-box;
+  display: grid;
+  gap: 10px;
+  width: min(320px, calc(100vw - 32px));
+  border: 1px solid var(--brand-silver);
+  border-radius: 6px;
+  padding: 14px;
+  background: var(--background-color);
+  box-shadow: var(--card-shadow);
 }
 
 .login .login-form input {
   box-sizing: border-box;
+  width: 100%;
   border: 1px solid var(--brand-silver);
   border-radius: 4px;
-  padding: 6px 10px;
+  padding: 8px 10px;
   font-size: var(--body-font-size-xs);
+}
+
+.login .login-form .button {
+  width: 100%;
+  margin: 0;
 }
 
 .login .login-optin {
@@ -62,4 +79,15 @@
   font-size: var(--body-font-size-xs);
   font-weight: 500;
   white-space: nowrap;
+}
+
+@media (max-width: 899px) {
+  .login {
+    justify-content: flex-start;
+  }
+
+  .login .login-form {
+    right: auto;
+    left: 0;
+  }
 }
