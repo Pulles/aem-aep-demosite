@@ -38,8 +38,9 @@ function renderLoggedIn(block, identity) {
 /**
  * @param {Element} block
  * @param {string} mode
+ * @param {boolean} open
  */
-function renderForm(block, mode) {
+function renderForm(block, mode, open = false) {
   block.innerHTML = '';
   const modeSwitcher = document.createElement('div');
   modeSwitcher.className = 'login-mode-switcher';
@@ -48,14 +49,17 @@ function renderForm(block, mode) {
   loginButton.className = `login-mode-button ${mode === LOGIN_MODE ? 'active' : ''}`;
   loginButton.textContent = 'Log in';
   loginButton.setAttribute('aria-pressed', String(mode === LOGIN_MODE));
-  loginButton.addEventListener('click', () => renderForm(block, LOGIN_MODE));
+  loginButton.addEventListener('click', () => renderForm(block, LOGIN_MODE, true));
   const registrationButton = document.createElement('button');
   registrationButton.type = 'button';
   registrationButton.className = `login-mode-button ${mode === REGISTRATION_MODE ? 'active' : ''}`;
   registrationButton.textContent = 'Register';
   registrationButton.setAttribute('aria-pressed', String(mode === REGISTRATION_MODE));
-  registrationButton.addEventListener('click', () => renderForm(block, REGISTRATION_MODE));
+  registrationButton.addEventListener('click', () => renderForm(block, REGISTRATION_MODE, true));
   modeSwitcher.append(loginButton, registrationButton);
+
+  block.append(modeSwitcher);
+  if (!open) return;
 
   const form = document.createElement('form');
   form.className = 'login-form';
@@ -116,7 +120,7 @@ function renderForm(block, mode) {
       console.error('Authentication failed', error);
     }
   });
-  block.append(modeSwitcher, form);
+  block.append(form);
 }
 
 /**
@@ -127,6 +131,6 @@ export default function decorate(block) {
   if (identity) {
     renderLoggedIn(block, identity);
   } else {
-    renderForm(block, LOGIN_MODE);
+    renderForm(block, LOGIN_MODE, false);
   }
 }
