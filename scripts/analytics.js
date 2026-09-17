@@ -19,6 +19,15 @@ function splitName(name = '') {
   };
 }
 
+function randomDigitSuffix() {
+  const length = Math.floor(Math.random() * 5) + 6;
+  let suffix = '';
+  while (suffix.length < length) {
+    suffix += Math.floor(Math.random() * 10);
+  }
+  return suffix;
+}
+
 async function getExperienceCloudId() {
   try {
     const result = await window.alloy('getIdentity');
@@ -96,6 +105,7 @@ export async function sendProfileToDcs(profile) {
   const ecid = await getExperienceCloudId();
   const { firstName, lastName } = splitName(profile.name);
   const phoneNumber = profile.phone || '';
+  const corePhoneNumber = phoneNumber ? `${phoneNumber}${randomDigitSuffix()}` : '';
   const timestamp = new Date().toISOString();
   const xdm = {
     header: {
@@ -141,7 +151,7 @@ export async function sendProfileToDcs(profile) {
             core: {
               email: profile.email,
               ecid,
-              phoneNumber,
+              phoneNumber: corePhoneNumber,
             },
           },
           scoring: {
