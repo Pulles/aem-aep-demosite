@@ -1,5 +1,5 @@
 import { loadCSS } from './aem.js';
-import { trackEvent } from './analytics.js?v=analytics-refresh';
+import { trackEvent } from './analytics.js';
 
 const FEATURE_EVENTS = {
   subscribe: 'Subscribe race alerts',

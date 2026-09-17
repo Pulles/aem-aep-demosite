@@ -87,7 +87,7 @@
   white-space: nowrap;
 }
 
-@media (max-width: 899px) {
+@media (width < 900px) {
   .login {
     justify-content: flex-start;
   }

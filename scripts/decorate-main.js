@@ -4,7 +4,7 @@ import {
   decorateBlocks,
   buildBlock,
 } from './aem.js';
-import { trackEvent } from './analytics.js?v=analytics-refresh';
+import { trackEvent } from './analytics.js';
 
 function buildWidgetAutoBlocks(main) {
   const widgetLinks = [...main.querySelectorAll('a[href*="/widgets/"]')];
@@ -30,6 +30,7 @@ function buildAutoBlocks(main) {
   try {
     const fragments = [...main.querySelectorAll('a[href*="/fragments/"]')].filter((f) => !f.closest('.fragment'));
     if (fragments.length > 0) {
+      // eslint-disable-next-line import/no-cycle
       import('../blocks/fragment/fragment.js').then(({ loadFragment }) => {
         fragments.forEach(async (fragment) => {
           try {

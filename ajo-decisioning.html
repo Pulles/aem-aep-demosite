@@ -46,7 +46,7 @@
     }
   </style>
   <script nonce="aem" type="module">
-    import { setAnalyticsConsent, trackPageView } from '/scripts/analytics.js?v=analytics-refresh';
+    import { setAnalyticsConsent, trackPageView } from '/scripts/analytics.js';
 
     setAnalyticsConsent(true).then(() => trackPageView()).catch((error) => {
       // eslint-disable-next-line no-console

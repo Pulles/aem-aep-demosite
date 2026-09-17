@@ -1,7 +1,7 @@
 import {
   getIdentity, setIdentity, clearIdentity, isKnownEmail, rememberEmail,
 } from '../../scripts/identity.js';
-import { sendProfileToDcs, trackEvent } from '../../scripts/analytics.js?v=analytics-refresh';
+import { sendProfileToDcs, trackEvent } from '../../scripts/analytics.js';
 
 const LOGIN_MODE = 'login';
 const REGISTRATION_MODE = 'registration';

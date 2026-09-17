@@ -1,5 +1,5 @@
 import { getCart, clearCart, cartTotal } from '../../scripts/cart.js';
-import { trackEvent } from '../../scripts/analytics.js?v=analytics-refresh';
+import { trackEvent } from '../../scripts/analytics.js';
 
 function formatPrice(amount) {
   return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' }).format(amount);

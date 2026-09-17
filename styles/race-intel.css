@@ -102,7 +102,7 @@
   font-size: var(--body-font-size-xs);
 }
 
-@media (max-width: 899px) {
+@media (width < 900px) {
   .race-intel-enhancement {
     padding: 18px;
   }

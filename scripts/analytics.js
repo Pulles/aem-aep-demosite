@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+
 /**
  * Adobe Web SDK (alloy) integration for the Heineken 0.0 Silverstone GP demo site.
  * Datastream + org are reused from an existing AEP sandbox — see
