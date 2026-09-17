@@ -1,4 +1,5 @@
 const PROJECT_ID_KEY = 'heineken-demo-dsn-project-id';
+const DEFAULT_PROJECT_ID = 'trum-ABL7';
 const PROFILE_VIEWER_SRC = '/plugins/profile-viewer/profile-viewer.js';
 const LAUNCHER_ID = 'profile-viewer-launcher';
 let initialized = false;
@@ -61,7 +62,7 @@ function getProjectId() {
     localStorage.setItem(PROJECT_ID_KEY, projectId);
     return projectId;
   }
-  return localStorage.getItem(PROJECT_ID_KEY);
+  return localStorage.getItem(PROJECT_ID_KEY) || DEFAULT_PROJECT_ID;
 }
 
 function loadProfileViewerRuntime() {
