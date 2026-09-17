@@ -53,6 +53,17 @@ function focusNavSection() {
   document.activeElement.addEventListener('keydown', openOnKeydown);
 }
 
+function addDecisioningNavItem(navSections) {
+  const navList = navSections?.querySelector(':scope .default-content-wrapper > ul');
+  if (!navList || navList.querySelector('a[href="/ajo-decisioning"]')) return;
+  const item = document.createElement('li');
+  const link = document.createElement('a');
+  link.href = '/ajo-decisioning';
+  link.textContent = 'AJO Decisioning';
+  item.append(link);
+  navList.append(item);
+}
+
 /**
  * Toggles all nav sections
  * @param {Element} sections The container element
@@ -139,6 +150,7 @@ export default async function decorate(block) {
 
   const navSections = nav.querySelector('.nav-sections');
   if (navSections) {
+    addDecisioningNavItem(navSections);
     navSections.querySelectorAll(':scope .default-content-wrapper > ul > li').forEach((navSection) => {
       if (navSection.querySelector('ul')) navSection.classList.add('nav-drop');
       navSection.addEventListener('click', () => {
