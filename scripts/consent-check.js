@@ -1,3 +1,5 @@
+import { setAnalyticsConsent } from './analytics.js';
+
 let consentedLoaded = false;
 
 /**
@@ -37,6 +39,10 @@ function loadConsented() {
  */
 function onConsentUpdate() {
   const consented = hasConsent();
+  setAnalyticsConsent(consented).catch((error) => {
+    // eslint-disable-next-line no-console
+    console.error('Consent update failed', error);
+  });
   window.dispatchEvent(new CustomEvent('consent.update', { detail: { consented } }));
   if (consented) {
     loadConsented();

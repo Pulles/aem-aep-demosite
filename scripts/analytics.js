@@ -16,6 +16,24 @@ export function initAnalytics() {
   return window.alloy('configure', {
     edgeConfigId: DATASTREAM_ID,
     orgId: ORG_ID,
+    defaultConsent: 'pending',
+  });
+}
+
+/**
+ * Applies the site's collection consent to Alloy.
+ * @param {boolean} consented Whether experience-event collection is allowed
+ * @returns {Promise<object>}
+ */
+export function setAnalyticsConsent(consented) {
+  return window.alloy('setConsent', {
+    consent: [{
+      standard: 'Adobe',
+      version: '2.0',
+      value: {
+        collect: { val: consented ? 'y' : 'n' },
+      },
+    }],
   });
 }
 

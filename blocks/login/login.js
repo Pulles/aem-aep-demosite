@@ -41,7 +41,10 @@ function renderForm(block) {
     const isNewUser = !isKnownEmail(email);
     rememberEmail(email);
     const identity = setIdentity({ name, email });
-    trackEvent(isNewUser ? 'authentication.registration' : 'authentication.login');
+    trackEvent(isNewUser ? 'authentication.registration' : 'authentication.login').catch((error) => {
+      // eslint-disable-next-line no-console
+      console.error('Login event failed', error);
+    });
     renderLoggedIn(block, identity);
   });
   block.append(form);
