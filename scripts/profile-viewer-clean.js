@@ -1,5 +1,5 @@
 const PROJECT_ID_KEY = 'heineken-demo-dsn-project-id';
-const DEFAULT_PROJECT_ID = 'trum-ABL7';
+const DEFAULT_PROJECT_ID = 'pvanoosterho-MDF1';
 const PROFILE_VIEWER_SRC = '/plugins/profile-viewer/profile-viewer.js';
 let initialized = false;
 
