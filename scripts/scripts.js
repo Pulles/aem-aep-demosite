@@ -227,7 +227,7 @@ async function loadLazy(doc) {
  */
 function loadDelayed() {
   import('./consent-check.js');
-  import('./profile-viewer.js?v=4ef7307').then(({ default: initProfileViewer }) => {
+  import('./profile-viewer.js?v=2e763a9').then(({ default: initProfileViewer }) => {
     initProfileViewer().catch((error) => {
       // eslint-disable-next-line no-console
       console.error('Profile viewer initialization failed', error);
