@@ -7,7 +7,7 @@
 // eslint-disable-next-line import/no-cycle
 import {
   decorateMain,
-} from '../../scripts/scripts.js';
+} from '../../scripts/scripts.js?v=045792a';
 
 import {
   loadSections,
