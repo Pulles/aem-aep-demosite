@@ -59,11 +59,11 @@ async function getExperienceCloudId() {
  * @returns {Promise<void>}
  */
 export function initAnalytics() {
-  return window.alloy('configure', {
+  return Promise.resolve().then(() => window.alloy('configure', {
     edgeConfigId: DATASTREAM_ID,
     orgId: ORG_ID,
     defaultConsent: 'pending',
-  }).catch((error) => {
+  })).catch((error) => {
     if (error.message?.includes('has already been configured')) return undefined;
     throw error;
   });
