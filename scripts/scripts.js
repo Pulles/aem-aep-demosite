@@ -11,7 +11,9 @@ import {
   loadCSS,
   buildBlock,
 } from './aem.js';
-import { initAnalytics, trackEvent, trackPageView } from './analytics.js';
+import {
+  initAnalytics, setAnalyticsConsent, trackEvent, trackPageView,
+} from './analytics.js';
 
 if (window.trustedTypes && window.trustedTypes.createPolicy) {
   const innerTT = window.trustedTypes.createPolicy('tt-inner', {
@@ -193,11 +195,10 @@ async function loadEager(doc) {
     // do nothing
   }
 
-  initAnalytics().catch((e) => {
+  initAnalytics().then(() => setAnalyticsConsent(true)).then(() => trackPageView()).catch((e) => {
     // eslint-disable-next-line no-console
-    console.error('Analytics init failed', e);
+    console.error('Analytics tracking failed', e);
   });
-  trackPageView();
 }
 
 /**
