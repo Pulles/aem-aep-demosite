@@ -1,4 +1,4 @@
-import { setAnalyticsConsent } from './analytics.js';
+import { setAnalyticsConsent } from './analytics.js?v=analytics-refresh';
 
 let consentedLoaded = false;
 

@@ -13,7 +13,7 @@ import {
 } from './aem.js';
 import {
   setAnalyticsConsent, trackEvent, trackPageView,
-} from './analytics.js';
+} from './analytics.js?v=analytics-refresh';
 
 if (window.trustedTypes && window.trustedTypes.createPolicy) {
   const innerTT = window.trustedTypes.createPolicy('tt-inner', {

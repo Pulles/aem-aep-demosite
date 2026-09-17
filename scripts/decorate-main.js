@@ -4,7 +4,7 @@ import {
   decorateBlocks,
   buildBlock,
 } from './aem.js';
-import { trackEvent } from './analytics.js';
+import { trackEvent } from './analytics.js?v=analytics-refresh';
 
 function buildWidgetAutoBlocks(main) {
   const widgetLinks = [...main.querySelectorAll('a[href*="/widgets/"]')];

@@ -18,7 +18,7 @@
  * Other schemas (e.g. dom-action, ruleset) aren't meaningful to render inside
  * a single block and resolve to `null`.
  */
-import { trackEvent } from './analytics.js';
+import { trackEvent } from './analytics.js?v=analytics-refresh';
 
 const OFFER_TIMEOUT_MS = 3000;
 
