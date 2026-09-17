@@ -59,6 +59,7 @@ async function getExperienceCloudId() {
  * @returns {Promise<void>}
  */
 export function initAnalytics() {
+  if (window.__heinekenAlloyConfigured) return Promise.resolve();
   return Promise.resolve().then(() => window.alloy('configure', {
     edgeConfigId: DATASTREAM_ID,
     orgId: ORG_ID,
