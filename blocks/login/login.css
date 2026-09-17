@@ -48,6 +48,10 @@
   box-shadow: var(--card-shadow);
 }
 
+.login:not(.open) .login-form {
+  display: none;
+}
+
 .login .login-form input {
   box-sizing: border-box;
   width: 100%;

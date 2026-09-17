@@ -22,6 +22,7 @@ async function sendAuthProfile(profile) {
  * @param {{ name: string, email: string }} identity
  */
 function renderLoggedIn(block, identity) {
+  block.classList.remove('open');
   block.innerHTML = '';
   const greeting = document.createElement('span');
   greeting.className = 'login-greeting';
@@ -41,6 +42,7 @@ function renderLoggedIn(block, identity) {
  * @param {boolean} open
  */
 function renderForm(block, mode, open = false) {
+  block.classList.toggle('open', open);
   block.innerHTML = '';
   const modeSwitcher = document.createElement('div');
   modeSwitcher.className = 'login-mode-switcher';
