@@ -20,8 +20,9 @@ function hasConsent() {
   if (consent !== null) {
     return ['accept', 'true', '1', 'yes'].includes(consent.toLowerCase());
   }
-  // default: decline
-  return false;
+  // The demo assumes consent is managed outside the site. Use ?consent=decline
+  // to exercise the suppressed-collection path locally.
+  return true;
 }
 
 /**

@@ -47,7 +47,20 @@ export function setAnalyticsConsent(consented) {
  */
 export function trackEvent(eventType, xdmFields = {}) {
   const identity = getIdentity();
-  const xdm = { eventType, ...xdmFields };
+  const params = new URLSearchParams(window.location.search);
+  const trackingCode = params.get('utm_campaign') || params.get('utm_source') || params.get('utm_medium');
+  const xdm = {
+    eventType,
+    ...(trackingCode && { marketing: { trackingCode } }),
+    ...xdmFields,
+    web: {
+      ...xdmFields.web,
+      webPageDetails: {
+        URL: window.location.href,
+        ...xdmFields.web?.webPageDetails,
+      },
+    },
+  };
   if (identity && identity.email) {
     xdm.identityMap = { Email: [{ id: identity.email, primary: true }] };
   }

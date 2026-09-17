@@ -11,7 +11,7 @@ import {
   loadCSS,
   buildBlock,
 } from './aem.js';
-import { initAnalytics, trackPageView } from './analytics.js';
+import { initAnalytics, trackEvent, trackPageView } from './analytics.js';
 
 if (window.trustedTypes && window.trustedTypes.createPolicy) {
   const innerTT = window.trustedTypes.createPolicy('tt-inner', {
@@ -139,6 +139,20 @@ function decorateButtons(main) {
     } else {
       a.classList.add('secondary');
       em.replaceWith(a);
+    }
+
+    if (a.classList.contains('primary')) {
+      a.addEventListener('click', () => {
+        trackEvent('web.webinteraction.linkClicks', {
+          web: {
+            webInteraction: {
+              name: a.textContent.trim(),
+              type: 'other',
+              URL: a.href,
+            },
+          },
+        });
+      });
     }
   });
 }
