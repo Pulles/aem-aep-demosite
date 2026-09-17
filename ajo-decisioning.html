@@ -29,26 +29,60 @@
     });
     window.__heinekenAlloyConfigured = true;
   </script>
-  <script nonce="aem" src="/scripts/aem.js" type="module"></script>
-  <script nonce="aem" src="/scripts/scripts.js?v=ajo-page" type="module"></script>
   <link rel="stylesheet" href="/styles/styles.css"/>
+  <link rel="stylesheet" href="/blocks/header/header.css"/>
+  <link rel="stylesheet" href="/blocks/footer/footer.css"/>
+  <style>
+    main .ajo-placeholder {
+      border: 1px dashed var(--brand-silver);
+      border-radius: var(--card-radius);
+      padding: 24px;
+      background: var(--light-color);
+    }
+
+    main .ajo-placeholder h2 {
+      margin-top: 0;
+      color: var(--brand-green-dark);
+    }
+  </style>
   <script nonce="aem" src="https://assets.adobedtm.com/962ef22b31a8/47cea5319c41/launch-58bcd4e020da-development.min.js" async></script>
 </head>
-<body>
-  <header></header>
+<body class="appear">
+  <header>
+    <div class="nav-wrapper">
+      <nav id="nav" aria-expanded="false">
+        <div class="nav-brand"><p><a href="/">Heineken 0.0 | Silverstone GP</a></p></div>
+        <div class="nav-sections">
+          <div class="default-content-wrapper">
+            <ul>
+              <li><a href="/">Home</a></li>
+              <li><a href="/tickets">Tickets</a></li>
+              <li><a href="/merch">Merch</a></li>
+              <li><a href="/race-intel">Race Intel</a></li>
+              <li><a href="/circuit">Circuit</a></li>
+              <li><a href="/ajo-decisioning.html">AJO Decisioning</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="nav-tools"></div>
+      </nav>
+    </div>
+  </header>
   <main>
     <div class="section">
       <div>
         <h1>AJO Decisioning</h1>
         <p>This page is reserved for Adobe Journey Optimizer decisioning content.</p>
       </div>
-      <div>
-        <div class="offer-banner placeholder">
-          <div>heineken-demo-offer-presale</div>
-        </div>
+      <div class="ajo-placeholder">
+        <h2>Decisioning placeholder</h2>
+        <p>Offer slot for decision scope <strong>heineken-demo-offer-presale</strong>.</p>
+        <p>AJO content can be connected here once the decision policy and offer are ready.</p>
       </div>
     </div>
   </main>
-  <footer></footer>
+  <footer>
+    <div class="footer"><div><p>© 2026 Heineken 0.0 Silverstone GP (demo site). Drink responsibly. 0.0% alcohol.</p></div></div>
+  </footer>
 </body>
 </html>
