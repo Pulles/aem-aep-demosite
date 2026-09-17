@@ -12,6 +12,17 @@ export default async function decorate(block) {
   if (!scope) return;
 
   const offer = await getOffer(scope);
+  if (!offer && block.classList.contains('placeholder')) {
+    const content = document.createElement('div');
+    content.className = 'offer-banner-content offer-banner-placeholder';
+    const headline = document.createElement('h3');
+    headline.textContent = 'AJO decisioning placeholder';
+    const description = document.createElement('p');
+    description.textContent = `Waiting for a qualifying offer from decision scope: ${scope}`;
+    content.append(headline, description);
+    block.append(content);
+    return;
+  }
   if (!offer) return;
 
   const content = document.createElement('div');
