@@ -64,7 +64,7 @@ export function initAnalytics() {
     orgId: ORG_ID,
     defaultConsent: 'pending',
   }).catch((error) => {
-    if (error.message?.includes('already been configured')) return undefined;
+    if (error.message?.includes('has already been configured')) return undefined;
     throw error;
   });
 }
