@@ -63,6 +63,9 @@ export function initAnalytics() {
     edgeConfigId: DATASTREAM_ID,
     orgId: ORG_ID,
     defaultConsent: 'pending',
+  }).catch((error) => {
+    if (error.message?.includes('already been configured')) return undefined;
+    throw error;
   });
 }
 
