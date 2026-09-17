@@ -10,6 +10,23 @@ const ORG_ID = '8AB51935659C10E40A495FA2@AdobeOrg';
 const DCS_PROFILE_ENDPOINT = 'https://dcs.adobedc.net/collection/b9e497817b014b5684766a0c5d8429d20d5159a6d03bd21f77531818fc3a44c3';
 const PROFILE_DATASET_ID = '6a96a91f7ba624c8c1169a21';
 const PROFILE_SCHEMA_REF = 'https://ns.adobe.com/demopotemea/schemas/1118fc8be763f5e0e3008df22e8e6843d2bcf422b83924b3';
+const DEMO_BRAND_NAME = 'trum-ABL7';
+const WEB_CHANNEL = 'web';
+const PAGE_VIEW_EVENT_TYPE = 'web.webpagedetails.pageViews';
+const PERSONALIZATION_SURFACE = `web://dsn.adobe.com/web/${DEMO_BRAND_NAME}`;
+
+function getPageName() {
+  const path = window.location.pathname.replace(/^\/+|\/+$/g, '');
+  return path || 'home';
+}
+
+function getIanaTimezone() {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+  } catch {
+    return undefined;
+  }
+}
 
 function splitName(name = '') {
   const parts = name.trim().split(/\s+/).filter(Boolean);
@@ -68,16 +85,20 @@ export function setAnalyticsConsent(consented) {
 
 /**
  * Sends an XDM event via alloy. Automatically attaches identityMap.Email
- * when a mock identity is present (see scripts/identity.js), so every
- * event fired after login/registration is stitched to that identity.
+ * when a mock identity is present and writes the current ECID to
+ * _demopotemea.identification.core.ecid.
  * @param {string} eventType XDM eventType, e.g. 'web.webpagedetails.pageViews'
  * @param {object} [xdmFields] Additional XDM fields to merge in
  * @returns {Promise<object>}
  */
-export function trackEvent(eventType, xdmFields = {}) {
+export async function trackEvent(eventType, xdmFields = {}) {
   const identity = getIdentity();
+  const ecid = await getExperienceCloudId();
   const params = new URLSearchParams(window.location.search);
   const trackingCode = params.get('utm_campaign') || params.get('utm_source') || params.get('utm_medium');
+  const demoPotemea = xdmFields._demopotemea || {};
+  const pageName = getPageName();
+  const ianaTimezone = getIanaTimezone();
   const xdm = {
     eventType,
     ...(trackingCode && { marketing: { trackingCode } }),
@@ -86,14 +107,54 @@ export function trackEvent(eventType, xdmFields = {}) {
       ...xdmFields.web,
       webPageDetails: {
         URL: window.location.href,
+        name: pageName,
+        viewName: pageName,
         ...xdmFields.web?.webPageDetails,
+      },
+      webReferrer: {
+        URL: document.referrer,
+        ...xdmFields.web?.webReferrer,
+      },
+    },
+    placeContext: {
+      ...(ianaTimezone && { ianaTimezone }),
+      ...xdmFields.placeContext,
+    },
+    _demopotemea: {
+      ...demoPotemea,
+      identification: {
+        ...demoPotemea.identification,
+        core: {
+          ...demoPotemea.identification?.core,
+          ...(ecid && { ecid }),
+        },
+      },
+      demoEnvironment: {
+        brandName: DEMO_BRAND_NAME,
+        ...demoPotemea.demoEnvironment,
+      },
+      interactionDetails: {
+        ...demoPotemea.interactionDetails,
+        core: {
+          channel: WEB_CHANNEL,
+          ...demoPotemea.interactionDetails?.core,
+        },
       },
     },
   };
   if (identity && identity.email) {
     xdm.identityMap = { Email: [{ id: identity.email, primary: true }] };
   }
-  return window.alloy('sendEvent', { xdm });
+  return window.alloy('sendEvent', {
+    xdm,
+    ...(eventType === PAGE_VIEW_EVENT_TYPE && {
+      renderDecisions: true,
+      personalization: {
+        decisionScopes: ['__view__'],
+        surfaces: [PERSONALIZATION_SURFACE],
+      },
+    }),
+  });
 }
 
 /**
@@ -181,10 +242,10 @@ export async function sendProfileToDcs(profile) {
  * @returns {Promise<object>}
  */
 export function trackPageView() {
-  return trackEvent('web.webpagedetails.pageViews', {
+  return trackEvent(PAGE_VIEW_EVENT_TYPE, {
     web: {
       webPageDetails: {
-        name: document.title,
+        pageViews: { value: 1 },
       },
     },
   });
