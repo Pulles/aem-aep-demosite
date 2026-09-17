@@ -4,6 +4,20 @@
   move-to-http-header="true"
 />
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
+<script nonce="aem">
+  if (window.trustedTypes && window.trustedTypes.createPolicy && !window.__heinekenTrustedTypesGuarded) {
+    const createPolicy = window.trustedTypes.createPolicy.bind(window.trustedTypes);
+    window.trustedTypes.createPolicy = function guardedCreatePolicy(name, rules) {
+      try {
+        return createPolicy(name, rules);
+      } catch (error) {
+        if (error.message && error.message.includes('already exists')) return rules;
+        throw error;
+      }
+    };
+    window.__heinekenTrustedTypesGuarded = true;
+  }
+</script>
 <script nonce="aem" src="/scripts/aem.js" type="module"></script>
 <script nonce="aem" src="/scripts/scripts.js?v=045792a" type="module"></script>
 <link rel="stylesheet" href="/styles/styles.css"/>
