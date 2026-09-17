@@ -12,7 +12,7 @@ import {
   buildBlock,
 } from './aem.js';
 import {
-  initAnalytics, setAnalyticsConsent, trackEvent, trackPageView,
+  setAnalyticsConsent, trackEvent, trackPageView,
 } from './analytics.js';
 
 if (window.trustedTypes && window.trustedTypes.createPolicy) {
@@ -195,7 +195,7 @@ async function loadEager(doc) {
     // do nothing
   }
 
-  initAnalytics().then(() => setAnalyticsConsent(true)).then(() => trackPageView()).catch((e) => {
+  setAnalyticsConsent(true).then(() => trackPageView()).catch((e) => {
     // eslint-disable-next-line no-console
     console.error('Analytics tracking failed', e);
   });
