@@ -1,4 +1,5 @@
 const PROJECT_ID_KEY = 'heineken-demo-dsn-project-id';
+const ACCESS_TOKEN_KEY = 'heineken-demo-dsn-access-token';
 const DEFAULT_PROJECT_ID = 'trum-ABL7';
 const PROFILE_VIEWER_SRC = '/plugins/profile-viewer/profile-viewer.js';
 const LAUNCHER_ID = 'profile-viewer-launcher';
@@ -55,6 +56,16 @@ function promptForProjectId() {
   return trimmed;
 }
 
+function promptForAccessToken() {
+  // eslint-disable-next-line no-alert
+  const accessToken = window.prompt('Demo System access token');
+  if (!accessToken) return null;
+  const trimmed = accessToken.trim();
+  if (!trimmed) return null;
+  sessionStorage.setItem(ACCESS_TOKEN_KEY, trimmed);
+  return trimmed;
+}
+
 function getProjectId() {
   const params = new URLSearchParams(window.location.search);
   const projectId = params.get('dsnProjectId');
@@ -63,6 +74,14 @@ function getProjectId() {
     return projectId;
   }
   return localStorage.getItem(PROJECT_ID_KEY) || DEFAULT_PROJECT_ID;
+}
+
+function getAccessToken() {
+  return sessionStorage.getItem(ACCESS_TOKEN_KEY);
+}
+
+function useCookieAuth() {
+  return new URLSearchParams(window.location.search).get('dsnUseCookies') === 'true';
 }
 
 function loadProfileViewerRuntime() {
@@ -94,6 +113,16 @@ export default async function initProfileViewer() {
     });
     return;
   }
+  const accessToken = getAccessToken();
+  if (!accessToken && !useCookieAuth()) {
+    showLauncher(async () => {
+      const configuredAccessToken = promptForAccessToken();
+      if (!configuredAccessToken) return;
+      await initProfileViewer();
+      await openProfileViewer();
+    });
+    return;
+  }
   if (initialized) {
     showLauncher(openProfileViewer);
     return;
@@ -101,6 +130,7 @@ export default async function initProfileViewer() {
   await loadProfileViewerRuntime();
   window.ProfileViewer.initialize({
     projectId,
+    ...(accessToken && { accessToken }),
     apiEnvironment: 'prod',
     colorScheme: 'light',
     autofetch: 'on-toggle',
