@@ -1,0 +1,119 @@
+.race-intel-enhancement {
+  box-sizing: border-box;
+  margin: 40px 16px;
+  border: 1px solid var(--brand-silver);
+  border-radius: 8px;
+  padding: 24px;
+  background:
+    linear-gradient(135deg, rgb(0 132 61 / 10%), rgb(255 255 255 / 92%)),
+    var(--background-color);
+  box-shadow: var(--card-shadow);
+}
+
+.race-intel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.race-intel-header h2 {
+  margin: 0;
+  color: var(--brand-green-dark);
+}
+
+.race-intel-kicker {
+  margin: 0 0 4px;
+  color: var(--brand-red);
+  font-size: var(--body-font-size-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.race-intel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.race-intel-action {
+  border: 1px solid var(--brand-silver);
+  border-radius: 999px;
+  padding: 8px 14px;
+  color: var(--brand-green-dark);
+  background: var(--background-color);
+  font-size: var(--body-font-size-xs);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.race-intel-action.active {
+  border-color: var(--brand-green);
+  color: var(--background-color);
+  background: var(--brand-green);
+}
+
+.race-intel-metrics,
+.race-intel-positions,
+.race-intel-penalties {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.race-intel-metric,
+.race-intel-position,
+.race-intel-penalty {
+  box-sizing: border-box;
+  display: grid;
+  gap: 4px;
+  min-height: 112px;
+  border: 1px solid rgb(0 132 61 / 18%);
+  border-radius: 6px;
+  padding: 14px;
+  background: rgb(255 255 255 / 86%);
+}
+
+.race-intel-metric span,
+.race-intel-position span,
+.race-intel-penalty span {
+  color: var(--text-color);
+  font-size: var(--body-font-size-xs);
+}
+
+.race-intel-metric strong,
+.race-intel-position strong,
+.race-intel-penalty strong,
+.race-intel-position-rank {
+  color: var(--brand-green-dark);
+  font-size: var(--heading-font-size-xs);
+  line-height: 1.1;
+}
+
+.race-intel-metric small,
+.race-intel-position small,
+.race-intel-penalty small {
+  color: var(--dark-color);
+  font-size: var(--body-font-size-xs);
+}
+
+@media (max-width: 899px) {
+  .race-intel-enhancement {
+    padding: 18px;
+  }
+
+  .race-intel-header {
+    display: grid;
+  }
+
+  .race-intel-metrics,
+  .race-intel-positions,
+  .race-intel-penalties {
+    grid-template-columns: 1fr;
+  }
+}
