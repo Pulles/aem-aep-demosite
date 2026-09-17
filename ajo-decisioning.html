@@ -3,9 +3,36 @@
 <head>
   <title>AJO Decisioning</title>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <script nonce="aem">
+    if (window.trustedTypes && window.trustedTypes.createPolicy && !window.__heinekenTrustedTypesGuarded) {
+      const createPolicy = window.trustedTypes.createPolicy.bind(window.trustedTypes);
+      window.trustedTypes.createPolicy = function guardedCreatePolicy(name, rules) {
+        try {
+          return createPolicy(name, rules);
+        } catch (error) {
+          if (error.message && error.message.includes('already exists')) return rules;
+          throw error;
+        }
+      };
+      window.__heinekenTrustedTypesGuarded = true;
+    }
+  </script>
   <script nonce="aem" src="/scripts/aem.js" type="module"></script>
   <script nonce="aem" src="/scripts/scripts.js?v=navfix" type="module"></script>
   <link rel="stylesheet" href="/styles/styles.css"/>
+  <script nonce="aem" src="/plugins/martech/src/alloy.min.js" async></script>
+  <script nonce="aem">
+    !function(n,o){o.forEach(function(o){n[o]||((n.__alloyNS=n.__alloyNS||[]).push(o),n[o]=
+    function(){var u=arguments;return new Promise(function(i,l){n[o].q.push([i,l,u])})},n[o].q=[])})}
+    (window,["alloy"]);
+    window.alloy("configure", {
+      edgeConfigId: "8b082166-1bea-41ac-9f3b-f5d9f691bc86",
+      orgId: "8AB51935659C10E40A495FA2@AdobeOrg",
+      defaultConsent: "pending",
+    });
+    window.__heinekenAlloyConfigured = true;
+  </script>
+  <script nonce="aem" src="https://assets.adobedtm.com/962ef22b31a8/47cea5319c41/launch-58bcd4e020da-development.min.js" async></script>
 </head>
 <body>
   <header></header>

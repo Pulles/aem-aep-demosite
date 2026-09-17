@@ -58,7 +58,7 @@ function addDecisioningNavItem(navSections) {
   if (!navList || navList.querySelector('a[href="/ajo-decisioning"]')) return;
   const item = document.createElement('li');
   const link = document.createElement('a');
-  link.href = '/ajo-decisioning';
+  link.href = '/ajo-decisioning.html';
   link.textContent = 'AJO Decisioning';
   item.append(link);
   navList.append(item);
