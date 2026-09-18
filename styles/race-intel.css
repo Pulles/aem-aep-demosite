@@ -38,6 +38,48 @@
   margin-bottom: 18px;
 }
 
+.race-intel-personalization {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) auto minmax(180px, auto);
+  align-items: end;
+  gap: 12px;
+  margin: 0 0 18px;
+  border: 1px solid rgb(0 132 61 / 18%);
+  border-radius: 6px;
+  padding: 14px;
+  background: rgb(255 255 255 / 72%);
+}
+
+.race-intel-field,
+.race-intel-toggle {
+  display: grid;
+  gap: 6px;
+  color: var(--brand-green-dark);
+  font-size: var(--body-font-size-xs);
+  font-weight: 700;
+}
+
+.race-intel-field select {
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid var(--brand-silver);
+  border-radius: 4px;
+  padding: 8px 10px;
+  color: var(--text-color);
+  background: var(--background-color);
+}
+
+.race-intel-toggle {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+}
+
+.race-intel-toggle input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+}
+
 .race-intel-action {
   border: 1px solid var(--brand-silver);
   border-radius: 999px;
@@ -109,6 +151,10 @@
 
   .race-intel-header {
     display: grid;
+  }
+
+  .race-intel-personalization {
+    grid-template-columns: 1fr;
   }
 
   .race-intel-metrics,

@@ -6,9 +6,22 @@ const FEATURE_EVENTS = {
   timing: 'Show live timing',
   positions: 'Show track positions',
   penalytics: 'Show penalytics',
+  favouriteDriver: 'Favourite driver selected',
+  heinekenAtHome: 'Heineken0.0 at home toggled',
 };
 
-function trackRaceIntelInteraction(action, label) {
+const DRIVERS = [
+  'Max Verstappen',
+  'Lando Norris',
+  'Lewis Hamilton',
+  'Charles Leclerc',
+  'George Russell',
+  'Oscar Piastri',
+  'Carlos Sainz',
+  'Fernando Alonso',
+];
+
+function trackRaceIntelInteraction(action, label, detail = {}) {
   return trackEvent('web.webinteraction.linkClicks', {
     web: {
       webInteraction: {
@@ -23,6 +36,7 @@ function trackRaceIntelInteraction(action, label) {
         core: {
           action,
           channel: 'web',
+          ...detail,
         },
       },
     },
@@ -55,6 +69,10 @@ function createPenalty(title, risk, detail) {
   return item;
 }
 
+function createDriverOptions() {
+  return DRIVERS.map((driver) => `<option value="${driver}">${driver}</option>`).join('');
+}
+
 function setActivePanel(block, action) {
   block.querySelectorAll('.race-intel-panel').forEach((panel) => {
     panel.hidden = panel.dataset.panel !== action;
@@ -80,6 +98,17 @@ function buildEnhancement() {
       <button type="button" class="race-intel-action active" data-action="timing" aria-pressed="true">Timing</button>
       <button type="button" class="race-intel-action" data-action="positions" aria-pressed="false">Positions</button>
       <button type="button" class="race-intel-action" data-action="penalytics" aria-pressed="false">Penalytics</button>
+    </div>
+    <div class="race-intel-personalization">
+      <label class="race-intel-field">
+        <span>Favourite driver</span>
+        <select name="favouriteDriver">${createDriverOptions()}</select>
+      </label>
+      <button type="button" class="button secondary race-intel-driver-save">Save favourite</button>
+      <label class="race-intel-toggle">
+        <input type="checkbox" name="heinekenAtHome" />
+        <span>Heineken0.0 at home</span>
+      </label>
     </div>
     <div class="race-intel-panel" data-panel="timing">
       <ul class="race-intel-metrics"></ul>
@@ -117,6 +146,22 @@ function buildEnhancement() {
     event.currentTarget.textContent = 'Subscribed';
     event.currentTarget.disabled = true;
     trackRaceIntelInteraction('subscribe', FEATURE_EVENTS.subscribe);
+  });
+
+  block.querySelector('.race-intel-driver-save').addEventListener('click', () => {
+    const favouriteDriver = block.querySelector('select[name="favouriteDriver"]').value;
+    trackRaceIntelInteraction('favourite-driver', FEATURE_EVENTS.favouriteDriver, {
+      personalizationAnchor: 'favouriteDriver',
+      favouriteDriver,
+    });
+  });
+
+  block.querySelector('input[name="heinekenAtHome"]').addEventListener('change', (event) => {
+    trackRaceIntelInteraction('heineken-at-home', FEATURE_EVENTS.heinekenAtHome, {
+      personalizationAnchor: 'heinekenAtHome',
+      optedIn: event.currentTarget.checked,
+      promptContext: 'safety-car-grab-a-0-0',
+    });
   });
 
   block.querySelectorAll('.race-intel-action').forEach((button) => {
