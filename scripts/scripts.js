@@ -215,7 +215,7 @@ async function loadLazy(doc) {
   const main = doc.querySelector('main');
   await loadSections(main);
   if (window.location.pathname.replace(/\/$/, '').endsWith('/race-intel')) {
-    import('./race-intel.js').then(({ default: initRaceIntel }) => initRaceIntel());
+    import('./race-intel-controls.js').then(({ default: initRaceIntel }) => initRaceIntel());
   }
 
   const { hash } = window.location;
