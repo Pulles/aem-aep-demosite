@@ -8,6 +8,7 @@ const FEATURE_EVENTS = {
   penalytics: 'Show penalytics',
   favouriteDriver: 'Favourite driver selected',
   heinekenAtHome: 'Heineken0.0 at home toggled',
+  fanGalleryCta: 'Show us your setup CTA',
 };
 
 const DRIVERS = [
@@ -92,7 +93,10 @@ function buildEnhancement() {
         <p class="race-intel-kicker">Race control</p>
         <h2>Live Silverstone intelligence</h2>
       </div>
-      <button type="button" class="button primary race-intel-subscribe" data-action="subscribe">Subscribe to alerts</button>
+      <div class="race-intel-header-actions">
+        <a class="button secondary race-intel-gallery-cta" href="/fan-gallery.html">Show us your setup</a>
+        <button type="button" class="button primary race-intel-subscribe" data-action="subscribe">Subscribe to alerts</button>
+      </div>
     </div>
     <div class="race-intel-actions" role="group" aria-label="Race intelligence views">
       <button type="button" class="race-intel-action active" data-action="timing" aria-pressed="true">Timing</button>
@@ -146,6 +150,13 @@ function buildEnhancement() {
     event.currentTarget.textContent = 'Subscribed';
     event.currentTarget.disabled = true;
     trackRaceIntelInteraction('subscribe', FEATURE_EVENTS.subscribe);
+  });
+
+  block.querySelector('.race-intel-gallery-cta').addEventListener('click', () => {
+    trackRaceIntelInteraction('fan-gallery-cta', FEATURE_EVENTS.fanGalleryCta, {
+      personalizationAnchor: 'raceViewingSetup',
+      destination: 'fan-gallery',
+    });
   });
 
   block.querySelector('.race-intel-driver-save').addEventListener('click', () => {

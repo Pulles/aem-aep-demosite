@@ -53,13 +53,13 @@ function focusNavSection() {
   document.activeElement.addEventListener('keydown', openOnKeydown);
 }
 
-function addDecisioningNavItem(navSections) {
+function addNavItem(navSections, href, label) {
   const navList = navSections?.querySelector(':scope .default-content-wrapper > ul');
-  if (!navList || navList.querySelector('a[href="/ajo-decisioning"]')) return;
+  if (!navList || navList.querySelector(`a[href="${href}"]`)) return;
   const item = document.createElement('li');
   const link = document.createElement('a');
-  link.href = '/ajo-decisioning.html';
-  link.textContent = 'AJO Decisioning';
+  link.href = href;
+  link.textContent = label;
   item.append(link);
   navList.append(item);
 }
@@ -150,7 +150,8 @@ export default async function decorate(block) {
 
   const navSections = nav.querySelector('.nav-sections');
   if (navSections) {
-    addDecisioningNavItem(navSections);
+    addNavItem(navSections, '/ajo-decisioning.html', 'AJO Decisioning');
+    addNavItem(navSections, '/fan-gallery.html', 'Fan Gallery');
     navSections.querySelectorAll(':scope .default-content-wrapper > ul > li').forEach((navSection) => {
       if (navSection.querySelector('ul')) navSection.classList.add('nav-drop');
       navSection.addEventListener('click', () => {

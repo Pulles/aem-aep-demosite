@@ -23,6 +23,13 @@
   color: var(--brand-green-dark);
 }
 
+.race-intel-header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
 .race-intel-kicker {
   margin: 0 0 4px;
   color: var(--brand-red);
@@ -151,6 +158,10 @@
 
   .race-intel-header {
     display: grid;
+  }
+
+  .race-intel-header-actions {
+    justify-content: flex-start;
   }
 
   .race-intel-personalization {
