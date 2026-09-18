@@ -31,8 +31,14 @@
   </script>
   <link rel="stylesheet" href="/styles/styles.css"/>
   <link rel="stylesheet" href="/blocks/header/header.css"/>
+  <link rel="stylesheet" href="/blocks/login/login.css"/>
   <link rel="stylesheet" href="/blocks/footer/footer.css"/>
   <link rel="stylesheet" href="/styles/fan-gallery.css"/>
+  <script nonce="aem" type="module">
+    import decorateLogin from '/blocks/login/login.js';
+
+    decorateLogin(document.querySelector('.nav-tools .login'));
+  </script>
   <script nonce="aem" type="module" src="/scripts/fan-gallery.js"></script>
   <script nonce="aem" src="https://assets.adobedtm.com/962ef22b31a8/47cea5319c41/launch-58bcd4e020da-development.min.js" async></script>
 </head>
@@ -54,7 +60,7 @@
             </ul>
           </div>
         </div>
-        <div class="nav-tools"></div>
+        <div class="nav-tools"><div class="login block"></div></div>
       </nav>
     </div>
   </header>
