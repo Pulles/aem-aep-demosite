@@ -217,6 +217,9 @@ async function loadLazy(doc) {
   if (window.location.pathname.replace(/\/$/, '').endsWith('/race-intel')) {
     import('./race-intel-personalization.js').then(({ default: initRaceIntel }) => initRaceIntel());
   }
+  if (window.location.pathname.replace(/\/$/, '').endsWith('/circuit')) {
+    import('./circuit-predictions.js').then(({ default: initCircuitPredictions }) => initCircuitPredictions());
+  }
 
   const { hash } = window.location;
   const element = hash ? doc.getElementById(hash.substring(1)) : false;
