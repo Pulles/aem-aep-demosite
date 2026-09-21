@@ -57,7 +57,7 @@ function buildPredictionForm() {
         <label>Second place<select name="second" required>${createOptions(savedPredictions.second || DRIVERS[1])}</select></label>
         <label>Third place<select name="third" required>${createOptions(savedPredictions.third || DRIVERS[2])}</select></label>
       </fieldset>
-      <label class="circuit-predictions-fastest">Fastest lap<select name="fastestLap" required>${createOptions(savedPredictions.fastestLap || DRIVERS[0])}</select></label>
+      <label class="circuit-predictions-fastest">Fastest lap time<input name="fastestLapTime" type="text" inputmode="decimal" pattern="[0-9]+:[0-5][0-9]\\.[0-9]{3}" placeholder="1:30.051" value="${savedPredictions.fastestLapTime || ''}" required /></label>
       <button type="submit" class="button primary">Save predictions</button>
       <p class="circuit-predictions-status" aria-live="polite"></p>
     </form>
@@ -73,7 +73,11 @@ function buildPredictionForm() {
       return;
     }
 
-    savePredictions(predictions);
+    const submittedPredictions = {
+      top3: [predictions.first, predictions.second, predictions.third],
+      fastestLapTime: predictions.fastestLapTime,
+    };
+    savePredictions({ ...predictions, ...submittedPredictions });
     status.textContent = 'Predictions saved. Good luck for race day.';
     trackEvent('web.webinteraction.linkClicks', {
       web: {
@@ -85,12 +89,8 @@ function buildPredictionForm() {
         },
       },
       _demopotemea: {
-        interactionDetails: {
-          core: {
-            action: 'circuit-predictions-saved',
-            channel: 'web',
-            ...predictions,
-          },
+        heineken: {
+          predictions: submittedPredictions,
         },
       },
     }).catch((error) => {
