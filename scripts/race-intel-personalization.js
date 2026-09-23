@@ -22,7 +22,7 @@ const DRIVERS = [
   'Fernando Alonso',
 ];
 
-function trackRaceIntelInteraction(action, label, detail = {}) {
+function trackRaceIntelInteraction(action, label, detail = {}, customFields = {}) {
   return trackEvent('web.webinteraction.linkClicks', {
     web: {
       webInteraction: {
@@ -33,6 +33,7 @@ function trackRaceIntelInteraction(action, label, detail = {}) {
       },
     },
     _demopotemea: {
+      ...customFields,
       interactionDetails: {
         core: {
           action,
@@ -163,7 +164,8 @@ function buildEnhancement() {
     const favouriteDriver = block.querySelector('select[name="favouriteDriver"]').value;
     trackRaceIntelInteraction('favourite-driver', FEATURE_EVENTS.favouriteDriver, {
       personalizationAnchor: 'favouriteDriver',
-      favouriteDriver,
+    }, {
+      heineken: { favouriteDriver },
     });
   });
 
